@@ -21,16 +21,15 @@ class HickeyPipeline(object):
         # medicineInfo = tuple(item["info"])
 
         url = item["url"]
-        print("FAIL_LOG_PATH------>>>{}".format(get_project_settings().get("FAIL_LOG_PATH")))
-        if item["info"] is None or len(item["info"]) == 0:
+        if item["info"]:
             print("{}未获取到数据，url需要记录---------------".format(url))
             writeFile(url=url,fileName=get_project_settings().get("FAIL_LOG_PATH"))
             raise DropItem("{}-----获取得数据为空，丢弃-------".format(url))
 
-        if isinstance(item,ForeignHickeyItem):
-            self.process_foreign_hickey(item)
-        else:
-            self.process_country_hickey(item)
+        # if isinstance(item,ForeignHickeyItem):
+        #     self.process_foreign_hickey(item)
+        # else:
+        #     self.process_country_hickey(item)
         # if isinstance(item,HickeyItem):
         #     self.process_country_item(medicineInfo, url)
         # elif isinstance(item,ForeignHickeyItem):
@@ -120,8 +119,9 @@ class HickeyPipeline(object):
         '''
 
         print("-----------------------处理国产器械------------------")
-        title = ["批准文号", "产品名称", "英文名称", "商品名", "剂型", "规格", "生产单位", "生产地址", "产品类别", "批准日期",
-                 "原批准文号", "药品本位码", "药品本位码备注"]
+        title = ["注册证编号", "注册人名称", "注册人住所", "生产地址", "代理人名称", "代理人住所", "产品名称", "型号、规格", "结构及组成",
+                 "适用范围", "其他内容", "备注", "批准日期", "有效期至", "附件", "产品标准", "变更日期",
+                 "邮编", "主要组成成分（体外诊断试剂）", "预期用途（体外诊断试剂）", "产品储存条件及有效期（体外诊断试剂）", "审批部门", "变更情况"]
         try:
             writeDataIntoExcel(data=item["info"], tilte=title,
                                fileName=get_project_settings().get("COUNTRY_HICKEY_FILE"))

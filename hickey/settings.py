@@ -115,3 +115,5 @@ FOREIGE_HICKEY_FILE = "F:/因朔枯资料/爬虫数据版本/器械/{}-{}-{}/进
 COUNTRY_HICKEY_FILE = "F:/因朔枯资料/爬虫数据版本/器械/{}-{}-{}/国产器械-{year}" \
                         "-{month}-{day}.xls".format(curr_time.year, curr_time.month, curr_time.day,
                                                     year=curr_time.year, month=curr_time.month, day=curr_time.day)
+
+

@@ -1,8 +1,6 @@
-from selenium import webdriver
 from xlrd import open_workbook
 from xlwt import Workbook
 from xlutils.copy import copy
-import xlsxwriter
 import os
 def read_time_out_url():
     lines = []
@@ -52,17 +50,56 @@ def writeDataIntoExcel(data,tilte,fileName):
         c_wb.save(fileName)
 
 
-'''
-:param strs:  源字符串
-:param s: 要定位的字符串s:
-:return: 
-'''
-def lastIndexOf(origin_str,s):
+def batchWriteDataIntoExcel(data, tilte, fileName):
+    '''
 
-   last_position = -1
-   while True:
-      positon = origin_str.find(s,last_position + 1)
-      if positon == -1 :
-          return last_position
-      last_position = positon
+        每次写入1000条数据
+    :param data:
+    :param tilte:
+    :param fileName:
+    :return:
+    '''
+    path = fileName[:lastIndexOf(fileName, "/")]
+    if not os.path.exists(path):
+        os.makedirs(path)
+    if not os.path.exists(fileName):
+        wk = Workbook(encoding="utf-8")
+        sheet = wk.add_sheet(sheetname=fileName[lastIndexOf(fileName, "/") + 1:lastIndexOf(fileName, ".")])
+        if tilte:
+            for i, v in enumerate(tilte):
+                sheet.write(0, i, v)
+            for row, v in enumerate(data):
+                row += 1
+                for col in range(len(v)):
+                    sheet.write(row, col, v[col])
+
+        else:
+            for row, v in enumerate(data):
+                for col in range(len(v)):
+                    sheet.write(row, col, v[col])
+        wk.save(fileName)
+    else:
+        wb = open_workbook(filename=fileName)
+        rows = wb.sheet_by_index(0).nrows  # 获取行数， 行数的角标从0开始
+        c_wb = copy(wb=wb)
+        c_st = c_wb.get_sheet(0)
+        for row, v in enumerate(data):
+            for col in range(len(v)):
+                c_st.write(rows+row, col, v[col])
+        c_wb.save(fileName)
+
+
+def lastIndexOf(origin_str, s):
+    '''
+        获取字符最后一次出现的位置
+        :param strs:  源字符串
+        :param s: 要定位的字符串s:
+        :return:
+    '''
+    last_position = -1
+    while True:
+        positon = origin_str.find(s, last_position + 1)
+        if positon == -1:
+            return last_position
+        last_position = positon
 

@@ -61,6 +61,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from hickey.util.fileUtil import writeFile
+from scrapy.selector import Selector
 class HickeyDownloaderMiddleware(object):
     # Not all methods need to be defined. If a method is not defined,
     # scrapy acts as if the downloader middleware does not modify the
@@ -86,6 +87,12 @@ class HickeyDownloaderMiddleware(object):
             # spider.browser.execute_script('window.stop()')
         time.sleep(2)
         html = spider.browser.page_source
+        selector = Selector(text=html)
+        title = selector.xpath('//*[@id="content"]/div/div/table[1]/tbody/tr[1]/td/div[1]').extract_first()
+        pageNo = selector.xpath('//*[@id="content"]/table[4]/tbody/tr/td[1]').extract_first()
+        if not title and not pageNo:
+            print("{}--------页面没有渲染成功".format(url))
+            return request
         # spider.browser.close()
         return HtmlResponse(url=url, body=html, encoding="utf-8",
                             request=request)
