@@ -1,8 +1,8 @@
 from scrapy.cmdline import execute
 import re
 
-execute("scrapy crawl country_hickey".split())
-# execute("scrapy crawl foreign_hickey".split())
+# execute("scrapy crawl country_hickey".split())
+execute("scrapy crawl foreign_hickey".split())
 
 #
 # reg = ".*\\/*.txt"

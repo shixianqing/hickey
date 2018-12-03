@@ -21,7 +21,7 @@ class HickeyPipeline(object):
         # medicineInfo = tuple(item["info"])
 
         url = item["url"]
-        if item["info"]:
+        if not item["info"]:
             print("{}未获取到数据，url需要记录---------------".format(url))
             writeFile(url=url,fileName=get_project_settings().get("FAIL_LOG_PATH"))
             raise DropItem("{}-----获取得数据为空，丢弃-------".format(url))
